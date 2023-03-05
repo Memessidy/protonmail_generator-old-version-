@@ -1,0 +1,5 @@
+python-guerrillamail==0.2.0
+selenium==4.8.2
+webdriver-manager==3.8.5
+pynput==1.7.6
+Faker==17.0.0

@@ -1,0 +1,1 @@
+CALL .\ENV\Scripts\python .\generator_interface.py
