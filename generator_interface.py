@@ -6,7 +6,7 @@ class MyGenerator:
     def __init__(self):
         self.__bad_tries_counter = 0
         # В коротких періодах - 5, в довгих 15 (3*5)
-        self.sleeping_time = 5
+        self.sleeping_time = 15
         # Кількість невдалих спроб, після досягнення стоп
         self.stop_on_bad_tries = 2
         # Кількість спроб всього
@@ -14,7 +14,7 @@ class MyGenerator:
         self.filename = "data.csv"
         self.use_capcha = False
         self.data = None
-        self.temporary_mail = "maildrop"
+        self.temporary_mail = "guerrilla"
 
     def run_generator(self):
         for i in range(self.num_of_tries):

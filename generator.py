@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -25,7 +26,10 @@ def new_protonmail(use_capcha=False, sleeping_time=5, temporary_mail='maildrop')
     # options = webdriver.ChromeOptions()
     # options.add_argument('--proxy-server=HOST:PORT')
 
-    driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=Options())
+    options = Options()
+    options.set_capability('acceptInsecureCerts', True)
+    driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=options)
+    driver.implicitly_wait(5)
     # driver.maximize_window()
     keyboard = Controller()
 
@@ -86,7 +90,7 @@ def new_protonmail(use_capcha=False, sleeping_time=5, temporary_mail='maildrop')
         content = get_guerrilla_mail(email)
         verification_code = content.split('<br>')[1].strip('</p>')
     elif temporary_mail == 'maildrop':
-        mail_drop = MailDrop(mailbox=email, sleeping_time=sleeping_time, tries_to_stop=5)
+        mail_drop = MailDrop(mailbox=email, sleeping_time=sleeping_time, tries_to_stop=15)
         verification_code = mail_drop.get_code_by_many_tries()
         if not verification_code:
             raise ValueError("code is empty!")

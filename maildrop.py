@@ -4,7 +4,7 @@ import time
 
 
 class MailDrop:
-    def __init__(self, mailbox="testmailbox", subject_name="Proton Verification Code", tries_to_stop=4,
+    def __init__(self, mailbox="testmailbox", subject_name="Proton Verification Code", tries_to_stop=5,
                  sleeping_time=5):
         self.__mailbox = mailbox
         self.__subject_name = subject_name
