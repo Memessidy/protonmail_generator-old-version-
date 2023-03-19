@@ -3,18 +3,18 @@ from generator import new_protonmail
 
 
 class MyGenerator:
-    def __init__(self):
+    def __init__(self, num_of_tries=1):
         self.__bad_tries_counter = 0
-        # В коротких періодах - 5, в довгих 15 (3*5)
-        self.sleeping_time = 15
+        self.max_sleeping_time = 10 # Обов`язково > 5
         # Кількість невдалих спроб, після досягнення стоп
         self.stop_on_bad_tries = 2
         # Кількість спроб всього
-        self.num_of_tries = 1
+        self.num_of_tries = num_of_tries
         self.filename = "data.csv"
         self.use_capcha = False
         self.data = None
-        self.temporary_mail = "guerrilla"
+        # guerrilla or maildrop
+        self.temporary_mail = "maildrop"
 
     def run_generator(self):
         for i in range(self.num_of_tries):
@@ -29,10 +29,12 @@ class MyGenerator:
                 continue
 
     def get_email(self):
-        self.data = new_protonmail(self.use_capcha, self.sleeping_time, self.temporary_mail)
+        self.data = new_protonmail(self.use_capcha, self.max_sleeping_time, self.temporary_mail)
         if self.data is None:
             print("Bad try! Stopping current...")
             return 1
+        self.write_data()
+        print("Writing...")
         return 0
 
     def write_data(self):
@@ -42,11 +44,19 @@ class MyGenerator:
             writer.writerow(self.data)
 
 
+def main():
+    print("На 1 ip за добу можна згенерувати приблизно 4 адреси")
+    num_of_tries = 0
+    num_of_tries = input("Введіть бажану кількість адресів: ")
+    if not num_of_tries.isdigit():
+        print("Повинно бути ціле число!!!")
+        return
+    else:
+        print("Starting...")
+        gen = MyGenerator(num_of_tries=int(num_of_tries))
+        gen.run_generator()
+        input("Type something to exit;")
+
+
 if __name__ == '__main__':
-    print("Starting...")
-    gen = MyGenerator()
-    gen.run_generator()
-    print("Writing...")
-    gen.write_data()
-    # print(gen.data)
-    input("Type something to exit;")
+    main()

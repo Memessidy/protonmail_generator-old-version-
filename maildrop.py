@@ -44,14 +44,6 @@ class MailDrop:
     def __get_verification_code(self):
         self.__verification_code = re.search(r'\d{4,10}', self.__content_html).group()
 
-    @property
-    def mailbox(self):
-        return self.__mailbox
-
-    @mailbox.setter
-    def mailbox(self, value):
-        self.__mailbox = value
-
     def get_code(self):
         message_exists = self.__get_message_id()
         if message_exists:
@@ -75,10 +67,4 @@ class MailDrop:
                     time.sleep(self.__sleeping_time)
         return verification_code
 
-
-if __name__ == '__main__':
-    mail_drop = MailDrop(mailbox="example", sleeping_time=3, tries_to_stop=5)
-    code = mail_drop.get_code_by_many_tries()
-    if code:
-        print(code)
 
