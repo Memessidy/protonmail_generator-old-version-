@@ -1,20 +1,21 @@
 import csv
 from generator import new_protonmail
+import settings
 
 
 class MyGenerator:
     def __init__(self, num_of_tries=1):
         self.__bad_tries_counter = 0
-        self.max_sleeping_time = 10 # Обов`язково > 5
+        self.max_sleeping_time = settings.max_sleeping_time
         # Кількість невдалих спроб, після досягнення стоп
-        self.stop_on_bad_tries = 2
+        self.stop_on_bad_tries = settings.stop_on_bad_tries
         # Кількість спроб всього
         self.num_of_tries = num_of_tries
-        self.filename = "data.csv"
+        self.filename = settings.filename
         self.use_capcha = False
         self.data = None
         # guerrilla or maildrop
-        self.temporary_mail = "maildrop"
+        self.temporary_mail = settings.temporary_email
 
     def run_generator(self):
         for i in range(self.num_of_tries):
