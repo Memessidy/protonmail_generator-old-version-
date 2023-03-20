@@ -18,7 +18,7 @@ class JetAcc:
         self.driver = None
         self.proton_login = None
         self.proton_password = None
-        self.file_name = 'data_for_accs.csv'
+        self.file_name = 'data.csv'
         self.jetbrains_accounts = 'jetbrains_accs.csv'
 
     def start_register_jetbrains(self):

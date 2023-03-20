@@ -11,7 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 import random
 from generate_random import generate_password
 
-from fake_data import get_person
 from guerrilla import get_guerrilla_mail
 from maildrop import MailDrop
 
@@ -52,7 +51,8 @@ def new_protonmail(use_capcha=False, sleeping_time=10, temporary_mail='guerilla'
     url = 'https://account.proton.me/signup?plan=free&billing=12&ref=prctbl&minimumCycle=1' \
           '2&currency=EUR&product=mail&language=en'
 
-    user = generate_password(10, 26)
+    capitalized = bool(random.getrandbits(1))
+    user = generate_password(10, 26).lower() if not capitalized else generate_password(10, 26).lower().capitalize()
     password = generate_password(11, 27, True)
     email = generate_password(12, 18)
     full_email = email + domain
