@@ -15,7 +15,7 @@ from guerrilla import get_guerrilla_mail
 from maildrop import MailDrop
 
 
-def new_protonmail(use_capcha=False, sleeping_time=10, temporary_mail='guerilla'):
+def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, temporary_mail='guerilla'):
     # options = Options()
     # options.add_argument('--allow-running-insecure-content')
     # options.add_argument('--ignore-certificate-errors')
@@ -27,9 +27,7 @@ def new_protonmail(use_capcha=False, sleeping_time=10, temporary_mail='guerilla'
     # options = webdriver.ChromeOptions()
     # options.add_argument('--proxy-server=HOST:PORT')
 
-    sleeping_time_min = 5
-    sleeping_time_max = sleeping_time
-    random_time_range = (sleeping_time_min, sleeping_time_max)
+    random_time_range = (min_sleeping_time, sleeping_time_max)
 
     options = Options()
     options.set_capability('acceptInsecureCerts', True)

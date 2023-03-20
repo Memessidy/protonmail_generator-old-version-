@@ -7,6 +7,7 @@ class MyGenerator:
     def __init__(self, num_of_tries=1):
         self.__bad_tries_counter = 0
         self.max_sleeping_time = settings.max_sleeping_time
+        self.min_sleeping_time = settings.min_sleeping_time
         # Кількість невдалих спроб, після досягнення стоп
         self.stop_on_bad_tries = settings.stop_on_bad_tries
         # Кількість спроб всього
@@ -30,7 +31,7 @@ class MyGenerator:
                 continue
 
     def get_email(self):
-        self.data = new_protonmail(self.use_capcha, self.max_sleeping_time, self.temporary_mail)
+        self.data = new_protonmail(self.use_capcha, self.max_sleeping_time, self.min_sleeping_time, self.temporary_mail)
         if self.data is None:
             print("Bad try! Stopping current...")
             return 1
