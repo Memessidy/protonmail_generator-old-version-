@@ -67,7 +67,7 @@ class JetAcc:
         self.keyboard.press(Key.enter)
         # in message here
         time.sleep(1)
-        for i in range(15):
+        for i in range(14):
             self.keyboard.press(Key.tab)
             time.sleep(0.5)
         self.keyboard.tap(Key.enter)
@@ -112,15 +112,24 @@ class JetAcc:
         self.driver.close()
         return self.person['password']
 
+    def try_app(self, row):
+        writed = False
+        while not writed:
+            try:
+                password = self.generate_account(row)
+                row.append(password)
+                self.write_jetbrains_data(row)
+                print("Записано!")
+                writed = True
+            except:
+                continue
+
     def generate_accounts(self):
         for row in self.get_data():
             if not row:
                 print("Немає доступних скриньок!")
             else:
-                password = self.generate_account(row)
-                row.append(password)
-                self.write_jetbrains_data(row)
-                print("Записано!")
+                self.try_app(row)
 
 
 if __name__ == '__main__':

@@ -50,9 +50,9 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
           '2&currency=EUR&product=mail&language=en'
 
     capitalized = bool(random.getrandbits(1))
-    user = generate_password(10, 26).lower() if not capitalized else generate_password(10, 26).lower().capitalize()
+    user = generate_password(11, 18).lower() if not capitalized else generate_password(10, 17).lower().capitalize()
     password = generate_password(11, 27, True)
-    email = generate_password(12, 18)
+    email = generate_password(12, 18).lower()
     full_email = email + domain
 
     driver.get(url)
@@ -117,7 +117,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
     time.sleep(random.randint(*random_time_range))
     elem.click()
 
-    time.sleep(sleeping_time_max)
+    time.sleep(sleeping_time_max*3)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
         EC.presence_of_element_located(
@@ -125,6 +125,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
     time.sleep(random.randint(*random_time_range))
     elem.click()
 
+    # time.sleep(sleeping_time_max * 5)
     # maybe later???
     elem = WebDriverWait(driver, sleeping_time_max).until(
         EC.presence_of_element_located((By.XPATH, '//button[text() = "Maybe later"]')))
@@ -136,7 +137,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
         EC.presence_of_element_located((By.XPATH, '//button[text() = "Confirm"]')))
     time.sleep(random.randint(*random_time_range))
     elem.click()
-    time.sleep(sleeping_time_max)
+    time.sleep(sleeping_time_max*2)
     driver.close()
 
     return {'login': user + "@proton.me", 'password': password}
