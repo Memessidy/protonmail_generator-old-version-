@@ -53,7 +53,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
     user = generate_password(15, 18, use_digits=True).lower() if not capitalized else\
         generate_password(15, 17, use_digits=True).lower().capitalize()
     password = generate_password(20, 27, True)
-    email = generate_password(9, 11).lower()
+    email = generate_password(8, 17).lower()
     full_email = email + domain
 
     driver.get(url)
