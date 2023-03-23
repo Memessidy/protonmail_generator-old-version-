@@ -9,6 +9,8 @@ import time
 from pynput.keyboard import Controller, Key
 from fake_data import get_person
 import csv
+from generate_random import generate_password
+from generator_interface import MyGenerator
 
 
 class JetAcc:
@@ -67,7 +69,7 @@ class JetAcc:
         self.keyboard.press(Key.enter)
         # in message here
         time.sleep(1)
-        for i in range(14):
+        for i in range(15):
             self.keyboard.press(Key.tab)
             time.sleep(0.5)
         self.keyboard.tap(Key.enter)
@@ -81,7 +83,7 @@ class JetAcc:
 
         self.driver.find_element(By.NAME, "firstName").send_keys(self.person['first name'])
         self.driver.find_element(By.NAME, "lastName").send_keys(self.person['last name'])
-        self.driver.find_element(By.NAME, "userName").send_keys(self.person['nickname'])
+        self.driver.find_element(By.NAME, "userName").send_keys(generate_password(min_length=6, max_length=11))
         self.driver.find_element(By.NAME, "password").send_keys(self.person['password'])
         self.driver.find_element(By.NAME, "pass2").send_keys(self.person['password'])
         self.driver.find_element(By.NAME, "privacy").click()
@@ -109,6 +111,7 @@ class JetAcc:
         time.sleep(5)
         self.protonmail_login()
         self.continue_registration()
+        time.sleep(5)
         self.driver.close()
         return self.person['password']
 
@@ -132,6 +135,20 @@ class JetAcc:
                 self.try_app(row)
 
 
-if __name__ == '__main__':
+def generate_with_new_email():
+    gen = MyGenerator(num_of_tries=int(1))
+    gen.run_generator()
+    print("Поштова скринька створена!")
     jet_acc = JetAcc()
     jet_acc.generate_accounts()
+    input("Type something to exit;")
+
+
+def generate_from_existing_file():
+    jet_acc = JetAcc()
+    jet_acc.generate_accounts()
+    input("Type something to exit;")
+
+
+if __name__ == '__main__':
+    generate_from_existing_file()
