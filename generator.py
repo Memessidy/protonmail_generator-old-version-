@@ -50,9 +50,10 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
           '2&currency=EUR&product=mail&language=en'
 
     capitalized = bool(random.getrandbits(1))
-    user = generate_password(11, 18).lower() if not capitalized else generate_password(10, 17).lower().capitalize()
-    password = generate_password(11, 27, True)
-    email = generate_password(12, 18).lower()
+    user = generate_password(15, 18, use_digits=True).lower() if not capitalized else\
+        generate_password(15, 17, use_digits=True).lower().capitalize()
+    password = generate_password(20, 27, True)
+    email = generate_password(9, 11).lower()
     full_email = email + domain
 
     driver.get(url)

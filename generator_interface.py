@@ -23,21 +23,20 @@ class MyGenerator:
             if self.__bad_tries_counter >= self.stop_on_bad_tries:
                 print("Number of bad tries reached. Stopping...")
                 return
-            try:
+            else:
                 self.__bad_tries_counter += self.get_email()
-            except Exception as exc:
-                print("One error has been excepted:")
-                print(exc)
-                continue
 
     def get_email(self):
-        self.data = new_protonmail(self.use_capcha, self.max_sleeping_time, self.min_sleeping_time, self.temporary_mail)
-        if self.data is None:
+        try:
+            self.data = new_protonmail(self.use_capcha, self.max_sleeping_time, self.min_sleeping_time,
+                                       self.temporary_mail)
+            self.write_data()
+            print("Writing...")
+            return 0
+        except Exception as exc:
+            print(exc)
             print("Bad try! Stopping current...")
             return 1
-        self.write_data()
-        print("Writing...")
-        return 0
 
     def write_data(self):
         with open(self.filename, mode='a', encoding='utf-8', newline='') as f:
