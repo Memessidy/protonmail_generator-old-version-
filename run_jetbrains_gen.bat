@@ -1,0 +1,1 @@
+CALL .\ENV\Scripts\python .\jetbrains_account_generator.py
