@@ -10,6 +10,7 @@ from pynput.keyboard import Controller
 from selenium.webdriver.support import expected_conditions as EC
 import random
 from generate_random import generate_password
+from fake_data import get_person
 
 from guerrilla import get_guerrilla_mail
 from maildrop import MailDrop
@@ -50,10 +51,12 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
           '2&currency=EUR&product=mail&language=en'
 
     capitalized = bool(random.getrandbits(1))
-    user = generate_password(15, 18, use_digits=True).lower() if not capitalized else\
-        generate_password(15, 17, use_digits=True).lower().capitalize()
+    user = (generate_password(1, 3) + get_person()['first name'] + generate_password(1, 3) + get_person()['last name']
+            + generate_password(1, 4)).lower()
+    user = user.capitalize() if capitalized else user
     password = generate_password(20, 27, True)
     email = generate_password(8, 17).lower()
+
     full_email = email + domain
 
     driver.get(url)
@@ -118,7 +121,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
     time.sleep(random.randint(*random_time_range))
     elem.click()
 
-    time.sleep(sleeping_time_max*3)
+    time.sleep(sleeping_time_max)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
         EC.presence_of_element_located(
@@ -138,7 +141,7 @@ def new_protonmail(use_capcha=False, sleeping_time_max=10, min_sleeping_time=5, 
         EC.presence_of_element_located((By.XPATH, '//button[text() = "Confirm"]')))
     time.sleep(random.randint(*random_time_range))
     elem.click()
-    time.sleep(sleeping_time_max*2)
+    time.sleep(sleeping_time_max)
     driver.close()
 
     return {'login': user + "@proton.me", 'password': password}

@@ -1,7 +1,7 @@
 # Назва файлу
 filename = "data.csv"
 #Назва домену для тимчасової пошти: guerrilla or maildrop
-temporary_email = "maildrop"
+temporary_email = "guerrilla"
 # Кількість невдалих спроб, після досягнення стоп
 stop_on_bad_tries = 1
 # Максимальний час перерви в коді (мінімальний - 5 сек)
