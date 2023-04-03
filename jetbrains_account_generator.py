@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.remote.command import Command
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -15,7 +16,7 @@ from generator_interface import MyGenerator
 
 class JetAcc:
     def __init__(self):
-        self.person = get_person()
+        self.person = None
         self.keyboard = Controller()
         self.driver = None
         self.proton_login = None
@@ -25,7 +26,7 @@ class JetAcc:
 
     def start_register_jetbrains(self):
         self.driver.get('https://account.jetbrains.com/login')
-        time.sleep(6)
+        time.sleep(5)
         self.driver.find_element(By.NAME, "email").send_keys(self.proton_login)
         elem = WebDriverWait(self.driver, 6).until(
             EC.presence_of_element_located(
@@ -36,50 +37,56 @@ class JetAcc:
         """
         Підтверджувати обліковий запис
         """
-
-        url = 'https://account.proton.me/login'
-        time.sleep(8)
-        self.driver.get(url)
-        elem = WebDriverWait(self.driver, 6).until(
-            EC.presence_of_element_located((By.ID, 'username')))
-        elem.send_keys(self.proton_login)
-
-        elem = WebDriverWait(self.driver, 6).until(
-            EC.presence_of_element_located((By.ID, 'password')))
-        elem.send_keys(self.proton_password)
-
-        elem = WebDriverWait(self.driver, 6).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
-        elem.click()
-
-        time.sleep(15)
-
         try:
-            for i in range(3):
-                elem = WebDriverWait(self.driver, 6).until(
-                    EC.presence_of_element_located(
-                        (By.XPATH, '//button[@class="button w100 button-large button-solid-norm"]')))
-                elem.click()
-                time.sleep(1)
-        except:
-            pass
+            url = 'https://account.proton.me/login'
+            self.driver.execute(Command.GET, {'url': url})
+            time.sleep(5)
 
-        self.keyboard.press(Key.tab)
-        self.keyboard.press(Key.enter)
-        # in message here
-        time.sleep(1)
-        for i in range(15):
+            elem = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.ID, 'username')))
+            elem.send_keys(self.proton_login)
+
+            elem = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.ID, 'password')))
+            elem.send_keys(self.proton_password)
+
+            elem = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
+            elem.click()
+
+            time.sleep(15)
+
+            try:
+                for i in range(3):
+                    elem = WebDriverWait(self.driver, 6).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//button[@class="button w100 button-large button-solid-norm"]')))
+                    elem.click()
+                    time.sleep(1)
+            except:
+                pass
+
             self.keyboard.press(Key.tab)
-            time.sleep(0.5)
-        self.keyboard.tap(Key.enter)
-        self.keyboard.press(Key.enter)
+            self.keyboard.press(Key.enter)
+            # in message here
+            time.sleep(1)
+            for i in range(15):
+                self.keyboard.press(Key.tab)
+                time.sleep(0.5)
+            self.keyboard.tap(Key.enter)
+            self.keyboard.press(Key.enter)
+
+            return True
+
+        except:
+            return False
 
     def continue_registration(self):
         elem = self.driver.find_element(By.XPATH, '//span[@class="text-bold text-break"]')
         self.driver.get(elem.text)
         # in jetbrains
-        time.sleep(14)
+        time.sleep(8)
 
         self.driver.find_element(By.NAME, "firstName").send_keys(self.person['first name'])
         self.driver.find_element(By.NAME, "lastName").send_keys(self.person['last name'])
@@ -106,26 +113,27 @@ class JetAcc:
         self.driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=Options())
         self.driver.maximize_window()
         self.proton_login, self.proton_password = row
-        time.sleep(5)
         self.start_register_jetbrains()
-        time.sleep(5)
-        self.protonmail_login()
-        self.continue_registration()
-        time.sleep(5)
-        self.driver.close()
-        return self.person['password']
+        time.sleep(3)
+        worked = self.protonmail_login()
+        if worked:
+            self.continue_registration()
+            time.sleep(5)
+            self.driver.close()
+            return self.person['password']
+        else:
+            raise ValueError("Не виконано!")
 
     def try_app(self, row):
-        writed = False
-        while not writed:
-            try:
-                password = self.generate_account(row)
-                row.append(password)
-                self.write_jetbrains_data(row)
-                print("Записано!")
-                writed = True
-            except:
-                continue
+        self.person = get_person()
+        try:
+            password = self.generate_account(row)
+        except Exception as exc:
+            print(f'Exception: {exc}')
+        else:
+            row.append(password)
+            self.write_jetbrains_data(row)
+            print('Записано!')
 
     def generate_accounts(self):
         for row in self.get_data():
@@ -133,6 +141,7 @@ class JetAcc:
                 print("Немає доступних скриньок!")
             else:
                 self.try_app(row)
+        print('finish!')
 
 
 def generate_with_new_email():
