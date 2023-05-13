@@ -10,4 +10,4 @@ def generate_password(min_length, max_length, use_digits=False):
     password = ''
     for i in range(length-1):
         password += random.choice(chars)
-    return char_1 + password
+    return char_1.lower() + password.lower()

@@ -66,5 +66,3 @@ class MailDrop:
                 if not verification_code:
                     time.sleep(self.__sleeping_time)
         return verification_code
-
-

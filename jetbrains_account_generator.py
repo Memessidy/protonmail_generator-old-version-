@@ -8,9 +8,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 from pynput.keyboard import Controller, Key
-from fake_data import get_person
+from random_press.unit_data import get_person
 import csv
-from generate_random import generate_password
+from random_press.generate_random import generate_password
 from generator_interface import MyGenerator
 
 
