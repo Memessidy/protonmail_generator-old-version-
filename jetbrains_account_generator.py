@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 from pynput.keyboard import Controller, Key
-from random_press.unit_data import get_person
+from random_press.unit_data import Unit
 import csv
 from random_press.generate_random import generate_password
 from generator_interface import MyGenerator
@@ -125,7 +125,8 @@ class JetAcc:
             raise ValueError("Не виконано!")
 
     def try_app(self, row):
-        self.person = get_person()
+        unit = Unit()
+        self.person = unit.get_person()
         try:
             password = self.generate_account(row)
         except Exception as exc:
