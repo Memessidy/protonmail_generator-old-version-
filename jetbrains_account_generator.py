@@ -94,6 +94,7 @@ class JetAcc:
         self.driver.find_element(By.NAME, "password").send_keys(self.person['password'])
         self.driver.find_element(By.NAME, "pass2").send_keys(self.person['password'])
         self.driver.find_element(By.NAME, "privacy").click()
+        time.sleep(5)
         elem = WebDriverWait(self.driver, 6).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//button[@class="pwd-submit-btn btn btn-primary btn-lg"]')))

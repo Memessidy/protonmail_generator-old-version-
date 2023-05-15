@@ -12,11 +12,11 @@ from random_press.unit_data import Unit
 
 options = Options()
 
-# ip_addr = '163.29.45.122'
-# port = '8080'
+# ip_addr = '20.111.54.16'
+# port = '80'
 #
 # options.add_argument(f"--proxy-server={ip_addr}:{port}")
-options.set_capability('acceptInsecureCerts', True)
+# options.set_capability('acceptInsecureCerts', True)
 # options.add_argument(f"user-agent=HelloWorld")
 
 
