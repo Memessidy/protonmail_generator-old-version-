@@ -12,8 +12,8 @@ from random_press.unit_data import Unit
 
 options = Options()
 
-# ip_addr = '20.111.54.16'
-# port = '80'
+# ip_addr = '20.204.190.254'
+# port = '3129'
 #
 # options.add_argument(f"--proxy-server={ip_addr}:{port}")
 # options.set_capability('acceptInsecureCerts', True)

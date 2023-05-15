@@ -1,5 +1,6 @@
 from string import ascii_lowercase, ascii_uppercase, digits, punctuation
 import random
+from faker import Faker
 
 
 def generate_password(min_length, max_length, use_special_symbols=False, use_digits=False, custom_symbols=None):
@@ -23,11 +24,43 @@ def generate_password(min_length, max_length, use_special_symbols=False, use_dig
 
     if custom_symbols:
         random_list = list(random_string)
-        for i in custom_symbols:
-            random_list.insert(random.randint(1, length-1), i)
+        last_index = 0
+        for symbol in custom_symbols:
+            current_index = random.randint(1, length-1)
+            if current_index == last_index:
+                current_index += 2
+            elif current_index == last_index+1:
+                current_index += 1
+            elif current_index == last_index-1:
+                current_index += 3
+
+            random_list.insert(current_index, symbol)
+            last_index = current_index
         random_string = ''.join(random_list)
     return random_string
 
 
-# res = generate_password(min_length=10, max_length=14, custom_symbols=['-', '_'], use_digits=True)
-# print(res)
+def get_username():
+    fake = Faker()
+    adjectives = ['happy', 'funny', 'clever', 'smart', 'cool', 'brave', 'kind', 'creative', 'gentle', 'awesome']
+    nouns = ['cat', 'dog', 'monkey', 'turtle', 'lion', 'bird', 'tiger', 'elephant', 'dolphin', 'dragon']
+
+    adjectives.extend([fake.word() for _ in range(90)])
+    nouns.extend([fake.word() for _ in range(90)])
+
+    res = ''
+    for _ in range(random.randint(1, 3)):
+        delimiter = random.choice(('-', "", "_"))
+        res += random.choice(adjectives) + delimiter + random.choice(nouns)
+
+    res += "" if random.choice([True, False]) else generate_password(3, 5, use_digits=True)
+    if len(res) > 39:
+        res = res[0:random.randint(22, 37)]
+    return res.lower()
+
+
+# for i in range(30):
+#     result = get_username()
+#     print(result)
+#     print(len(result))
+#     print()
