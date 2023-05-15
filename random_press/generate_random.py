@@ -23,12 +23,11 @@ def generate_password(min_length, max_length, use_special_symbols=False, use_dig
 
     if custom_symbols:
         random_list = list(random_string)
-        index = random.randint(2, min_length-6)
-        for symbol in custom_symbols:
-            random_list.insert(index, symbol)
-            index += random.randint(2, 5)
+        for i in custom_symbols:
+            random_list.insert(random.randint(1, length-1), i)
         random_string = ''.join(random_list)
     return random_string
 
 
-# print(generate_password(15, 20, custom_symbols=['-', '_']))
+# res = generate_password(min_length=10, max_length=14, custom_symbols=['-', '_'], use_digits=True)
+# print(res)

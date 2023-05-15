@@ -63,9 +63,8 @@ class Unit:
         self.__password = generate_password(min_length=18, max_length=30, use_digits=True, use_special_symbols=True)
         self.__first_name = fake.first_name()
         self.__last_name = fake.last_name()
-        self.__user_name = generate_password(min_length=3, max_length=6, custom_symbols=['-', '_'], use_digits=True)\
-                           + self.first_name + \
-                           self.last_name + generate_password(1, 5, use_digits=True)
+        self.__user_name = generate_password(min_length=10, max_length=14, custom_symbols=['-', '_'], use_digits=True)\
+                           + self.last_name
 
     def get_person(self):
         result = {
