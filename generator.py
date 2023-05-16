@@ -11,19 +11,21 @@ from random_press.unit_data import Unit
 # from fake_useragent import UserAgent
 
 options = Options()
-
 # ip_addr = '20.204.190.254'
 # port = '3129'
 #
 # options.add_argument(f"--proxy-server={ip_addr}:{port}")
 # options.set_capability('acceptInsecureCerts', True)
 # options.add_argument(f"user-agent=HelloWorld")
+# options.add_argument("--window-size=1366,768")
+# options.headless = True
 
 
 def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_middle=15):
 
     keyboard = Controller()
     driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=options)
+    driver.maximize_window()
     unit = Unit()
 
     url = 'https://account.proton.me/signup?plan=free&billing=12&ref=prctbl&minimumCycle=1' \
@@ -42,6 +44,8 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Create account"]')))
     # Перший клік пілся паролів (середнє очікування)
     elem.click()
+
+    # print("Trying to create account")
     time.sleep(sleeping_time_middle)
 
     # Пошук кнопки email (коротке очікування)
@@ -59,6 +63,7 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Get verification code"]')))
     time.sleep(sleeping_time_min)
     elem.click()
+    # print("Trying to get verification code")
     # Пілся натискання Get verification code
 
     verification_code = unit.mail_box.get_code()
@@ -67,6 +72,7 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
     elem = WebDriverWait(driver, sleeping_time_max).until(
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Verify"]')))
     elem.click()
+    # print("Verified")
 
     # Після натискання кнопки Verify (піля того, як ввели код з пошти)(середнє очікування)
     time.sleep(sleeping_time_middle)
@@ -75,6 +81,7 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Next"]')))
     time.sleep(sleeping_time_middle)
     elem.click()
+    # print("Trying to create account: continuing")
     # Після натискання кнопки Next (Сережнє очікування)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
@@ -87,7 +94,12 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
     elem = WebDriverWait(driver, sleeping_time_max).until(
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Confirm"]')))
     elem.click()
-    time.sleep(sleeping_time_middle)
+    time.sleep(sleeping_time_min)
 
     driver.close()
+
+    try:
+        driver.quit()
+    except:
+        pass
     return {'login': f"{unit.user_name}@proton.me", 'password': unit.password}
