@@ -39,11 +39,7 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
     driver.find_element(By.ID, 'repeat-password').send_keys(unit.password)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR,
-                                            "body > div.app-root > div.flex-no-min-children.flex-nowrap.flex-column.h100.s"
-                                            "ign-layout-bg.scroll-if-needed.relative > div.sign-layout-container.flex-"
-                                            "item-fluid-auto.flex.flex-nowrap.flex-column.flex-justify-space-between > d"
-                                            "iv > main > div.sign-layout-main-content > form > button")))
+            EC.presence_of_element_located((By.XPATH, '//button[text() = "Create account"]')))
     # Перший клік пілся паролів (середнє очікування)
     elem.click()
     time.sleep(sleeping_time_middle)
@@ -60,8 +56,7 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
     driver.find_element(By.ID, 'email').send_keys(unit.mail_box.box_name + unit.mail_box.domain)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
+            EC.presence_of_element_located((By.XPATH, '//button[text() = "Get verification code"]')))
     time.sleep(sleeping_time_min)
     elem.click()
     # Пілся натискання Get verification code
@@ -70,16 +65,14 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
     driver.find_element(By.ID, 'verification').send_keys(verification_code)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
+            EC.presence_of_element_located((By.XPATH, '//button[text() = "Verify"]')))
     elem.click()
 
     # Після натискання кнопки Verify (піля того, як ввели код з пошти)(середнє очікування)
     time.sleep(sleeping_time_middle)
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
+            EC.presence_of_element_located((By.XPATH, '//button[text() = "Next"]')))
     time.sleep(sleeping_time_middle)
     elem.click()
     # Після натискання кнопки Next (Сережнє очікування)
@@ -93,7 +86,6 @@ def new_protonmail(sleeping_time_min=10, sleeping_time_max=30, sleeping_time_mid
 
     elem = WebDriverWait(driver, sleeping_time_max).until(
             EC.presence_of_element_located((By.XPATH, '//button[text() = "Confirm"]')))
-    time.sleep(sleeping_time_min)
     elem.click()
     time.sleep(sleeping_time_middle)
 
