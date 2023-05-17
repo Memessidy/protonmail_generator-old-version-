@@ -63,10 +63,10 @@ class Unit:
             self.__mail_box.domain = self.domains[settings.temporary_email]
         except Exception as exc:
             raise ValueError('Check your temporary email in settings')
-        use_special_symbols = random.choice([True, False])
+        # use_special_symbols = random.choice([True, False])
         use_digits = random.choice([True, False])
-        self.__password = generate_password(min_length=18, max_length=30, use_digits=use_digits,
-                                            use_special_symbols=use_special_symbols)
+        self.__password = generate_password(min_length=25, max_length=35, use_digits=use_digits,
+                                            use_special_symbols=False)
         self.__first_name = fake.first_name()
         self.__last_name = fake.last_name()
 

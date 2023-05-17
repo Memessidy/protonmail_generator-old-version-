@@ -11,8 +11,9 @@ from random_press.unit_data import Unit
 # from fake_useragent import UserAgent
 
 options = Options()
-# ip_addr = '20.204.190.254'
-# port = '3129'
+
+# ip_addr = '5.78.41.248'
+# port = '8080'
 #
 # options.add_argument(f"--proxy-server={ip_addr}:{port}")
 # options.set_capability('acceptInsecureCerts', True)

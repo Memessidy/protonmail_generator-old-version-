@@ -56,6 +56,8 @@ def get_username():
     res += "" if random.choice([True, False]) else generate_password(3, 5, use_digits=True)
     if len(res) > 39:
         res = res[0:random.randint(22, 37)]
+    if len(res) <= 20:
+        res += generate_password(5, 8, use_digits=True)
     return res.lower()
 
 
