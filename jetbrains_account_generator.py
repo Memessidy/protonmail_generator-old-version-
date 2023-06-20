@@ -22,6 +22,8 @@ class JetAcc:
         self.proton_password = None
         self.file_name = 'data.csv'
         self.jetbrains_accounts = 'jetbrains_accs.csv'
+        self.write = True
+        self.data = None
 
     def start_register_jetbrains(self):
         self.driver.get('https://account.jetbrains.com/login')
@@ -142,10 +144,15 @@ class JetAcc:
         try:
             password = self.generate_account(row)
             row.append(password)
-            self.write_jetbrains_data(row)
-            print('Записано!')
+            self.data = row
+            if self.write:
+                self.write_jetbrains_data(self.data)
+                print('Записано!')
         except Exception as exc:
             print(f'Exception: {exc}')
+
+    def generate_one_account(self, row):
+        self.try_app(row)
 
     def generate_accounts(self):
         for row in self.get_data():
@@ -158,10 +165,15 @@ class JetAcc:
 
 def generate_with_new_email():
     gen = MyGenerator(num_of_tries=1)
+    gen.write = False
     gen.run_generator()
     print("Поштова скринька створена!")
     jet_acc = JetAcc()
-    jet_acc.generate_accounts()
+    jet_acc.write = False
+    data = [gen.data['login'], gen.data['password']]
+    jet_acc.generate_one_account(row=data)
+    print(f"Protonmail: {jet_acc.data[0]}; Protonmail password: {jet_acc.data[1]}; "
+          f"Jetbrains password: {jet_acc.data[2]}")
     input("Type something to exit;")
 
 
@@ -172,4 +184,4 @@ def generate_from_existing_file():
 
 
 if __name__ == '__main__':
-    generate_from_existing_file()
+    generate_with_new_email()

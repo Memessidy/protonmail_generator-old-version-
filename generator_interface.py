@@ -15,6 +15,7 @@ class MyGenerator:
         self.num_of_tries = num_of_tries
         self.filename = settings.filename
         self.data = None
+        self.write = True
 
     def run_generator(self):
         for i in range(self.num_of_tries):
@@ -29,8 +30,8 @@ class MyGenerator:
             self.data = new_protonmail(sleeping_time_min=self.min_sleeping_time,
                                        sleeping_time_max=self.max_sleeping_time,
                                        sleeping_time_middle=self.sleeping_time_middle)
-            self.write_data()
-            print("Writing...")
+            if self.write:
+                self.write_data()
             return 0
         except Exception as exc:
             print(exc)
