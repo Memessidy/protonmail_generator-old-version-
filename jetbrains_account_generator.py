@@ -10,15 +10,14 @@ import time
 from pynput.keyboard import Controller, Key
 from random_press.unit_data import Unit
 import csv
-from random_press.generate_random import generate_password
 from generator_interface import MyGenerator
 
 
 class JetAcc:
     def __init__(self):
-        self.person = None
+        self.unit = Unit()
         self.keyboard = Controller()
-        self.driver = None
+        self.driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=Options())
         self.proton_login = None
         self.proton_password = None
         self.file_name = 'data.csv'
@@ -38,7 +37,7 @@ class JetAcc:
         Підтверджувати обліковий запис
         """
         try:
-            url = 'https://account.proton.me/login'
+            url = 'https://account.proton.me/login?product=mail&language=en'
             self.driver.execute(Command.GET, {'url': url})
             time.sleep(5)
 
@@ -52,12 +51,20 @@ class JetAcc:
 
             elem = WebDriverWait(self.driver, 15).until(
                 EC.presence_of_element_located(
-                    (By.XPATH, '//button[@class="button w100 button-large button-solid-norm mt1-5"]')))
+                    (By.XPATH, '//button[text() = "Sign in"]')))
             elem.click()
 
             time.sleep(15)
 
             try:
+                try:
+                    elem = WebDriverWait(self.driver, 6).until(
+                        EC.presence_of_element_located(
+                            (By.XPATH, '//button[text() = "Skip"]')))
+                    elem.click()
+                except:
+                    pass
+
                 for i in range(3):
                     elem = WebDriverWait(self.driver, 6).until(
                         EC.presence_of_element_located(
@@ -76,29 +83,38 @@ class JetAcc:
                 time.sleep(0.5)
             self.keyboard.tap(Key.enter)
             self.keyboard.press(Key.enter)
+            time.sleep(2)
 
-            return True
+            elem = self.driver.find_element(By.XPATH, '//span[@class="text-bold text-break"]')
+            reg_link = elem.text
+            print(f"Посилання для продовження реєстрації на Jetbrains: {reg_link}")
+            # self.driver.close()
+            return reg_link
 
         except:
             return False
 
-    def continue_registration(self):
-        elem = self.driver.find_element(By.XPATH, '//span[@class="text-bold text-break"]')
-        self.driver.get(elem.text)
+    def continue_registration(self, reg_link):
         # in jetbrains
-        time.sleep(8)
 
-        self.driver.find_element(By.NAME, "firstName").send_keys(self.person['first name'])
-        self.driver.find_element(By.NAME, "lastName").send_keys(self.person['last name'])
-        self.driver.find_element(By.NAME, "userName").send_keys(generate_password(min_length=6, max_length=11))
-        self.driver.find_element(By.NAME, "password").send_keys(self.person['password'])
-        self.driver.find_element(By.NAME, "pass2").send_keys(self.person['password'])
-        self.driver.find_element(By.NAME, "privacy").click()
-        time.sleep(5)
-        elem = WebDriverWait(self.driver, 6).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[@class="pwd-submit-btn btn btn-primary btn-lg"]')))
-        elem.click()
+        self.driver.execute(Command.GET, {'url': reg_link})
+        try:
+            self.unit.generate_values()
+            self.driver.find_element(By.NAME, "firstName").send_keys(self.unit.first_name)
+            self.driver.find_element(By.NAME, "lastName").send_keys(self.unit.last_name)
+            self.driver.find_element(By.NAME, "userName").send_keys(self.unit.user_name)
+            self.driver.find_element(By.NAME, "password").send_keys(self.unit.password)
+            self.driver.find_element(By.NAME, "pass2").send_keys(self.unit.password)
+            self.driver.find_element(By.NAME, "privacy").click()
+            time.sleep(5)
+
+            button = WebDriverWait(self.driver, 6).until(
+                EC.presence_of_element_located(
+                    (By.XPATH, '//button[text() = "Submit"]')))
+
+            button.click()
+        except:
+            ValueError("Не зареєстровано!!!")
 
     def write_jetbrains_data(self, data):
         with open(self.jetbrains_accounts, mode='a+',  newline='') as file:
@@ -111,31 +127,25 @@ class JetAcc:
                 yield row
 
     def generate_account(self, row):
-        self.driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=Options())
         self.driver.maximize_window()
         self.proton_login, self.proton_password = row
         self.start_register_jetbrains()
         time.sleep(3)
-        worked = self.protonmail_login()
-        if worked:
-            self.continue_registration()
-            time.sleep(5)
-            self.driver.close()
-            return self.person['password']
-        else:
-            raise ValueError("Не виконано!")
+        reg_link = self.protonmail_login()
+        time.sleep(5)
+        self.continue_registration(reg_link)
+        time.sleep(10)
+        self.driver.close()
+        return self.unit.password
 
     def try_app(self, row):
-        unit = Unit()
-        self.person = unit.get_person()
         try:
             password = self.generate_account(row)
-        except Exception as exc:
-            print(f'Exception: {exc}')
-        else:
             row.append(password)
             self.write_jetbrains_data(row)
             print('Записано!')
+        except Exception as exc:
+            print(f'Exception: {exc}')
 
     def generate_accounts(self):
         for row in self.get_data():
@@ -147,7 +157,7 @@ class JetAcc:
 
 
 def generate_with_new_email():
-    gen = MyGenerator(num_of_tries=int(1))
+    gen = MyGenerator(num_of_tries=1)
     gen.run_generator()
     print("Поштова скринька створена!")
     jet_acc = JetAcc()

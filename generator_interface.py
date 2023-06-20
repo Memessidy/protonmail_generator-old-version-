@@ -15,7 +15,6 @@ class MyGenerator:
         self.num_of_tries = num_of_tries
         self.filename = settings.filename
         self.data = None
-        # guerrilla or maildrop
 
     def run_generator(self):
         for i in range(self.num_of_tries):
