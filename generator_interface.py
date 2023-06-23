@@ -46,7 +46,7 @@ class MyGenerator:
 
 
 def main():
-    print("На 1 ip за добу можна згенерувати приблизно 4 адреси")
+    print("На 1 ip за добу можна згенерувати приблизно 3-4 адреси")
     num_of_tries = 0
     num_of_tries = input("Введіть бажану кількість адресів: ")
     if not num_of_tries.isdigit():

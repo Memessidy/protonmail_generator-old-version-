@@ -140,7 +140,7 @@ class JetAcc:
         self.driver.close()
         return self.unit.password
 
-    def try_app(self, row):
+    def generate_one_account(self, row):
         try:
             password = self.generate_account(row)
             row.append(password)
@@ -151,15 +151,12 @@ class JetAcc:
         except Exception as exc:
             print(f'Exception: {exc}')
 
-    def generate_one_account(self, row):
-        self.try_app(row)
-
     def generate_accounts(self):
         for row in self.get_data():
             if not row:
                 print("Немає доступних скриньок!")
             else:
-                self.try_app(row)
+                self.generate_one_account(row)
         print('finish!')
 
 
@@ -174,7 +171,6 @@ def generate_with_new_email():
     jet_acc.generate_one_account(row=data)
     print(f"Protonmail: {jet_acc.data[0]}; Protonmail password: {jet_acc.data[1]}; "
           f"Jetbrains password: {jet_acc.data[2]}")
-    input("Type something to exit;")
 
 
 def generate_from_existing_file():
@@ -183,5 +179,20 @@ def generate_from_existing_file():
     input("Type something to exit;")
 
 
+def main():
+    print("Скільки аккаунтів портібно згенерувати(за раз можливо 3-4): ")
+    account_count = input(">> ")
+    try:
+        account_count = int(account_count)
+    except:
+        print("Ротрібно ввести ціле число!")
+        return
+
+    for i in range(account_count):
+        generate_with_new_email()
+
+    input("Завершено! Натисніть любу клавішу")
+
+
 if __name__ == '__main__':
-    generate_with_new_email()
+    main()
