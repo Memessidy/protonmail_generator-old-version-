@@ -1,6 +1,7 @@
 # Назва файлу
 filename = "data.csv"
 #Назва домену для тимчасової пошти: guerrilla or maildrop, getnada(tafmail, inboxbear, dropjar)
+possible_emails = ["guerrilla", "maildrop", "tafmail", "inboxbear", "dropjar"]
 temporary_email = "maildrop"
 # Кількість невдалих спроб, після досягнення стоп
 stop_on_bad_tries = 1

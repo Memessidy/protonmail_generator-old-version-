@@ -1,5 +1,5 @@
 import csv
-from generator import new_protonmail
+from web_generators.generator import new_protonmail
 import settings
 
 
@@ -57,6 +57,14 @@ def main():
         gen = MyGenerator(num_of_tries=int(num_of_tries))
         gen.run_generator()
         input("Type something to exit;")
+
+
+def create_one():
+    gen = MyGenerator(num_of_tries=1)
+    gen.write = False
+    gen.run_generator()
+    data = [gen.data['login'], gen.data['password']]
+    return data
 
 
 if __name__ == '__main__':

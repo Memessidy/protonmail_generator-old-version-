@@ -1,6 +1,7 @@
 */idea/
 */__pycache__/
 data.csv
+*data*
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml

@@ -10,7 +10,7 @@ import time
 from pynput.keyboard import Controller, Key
 from random_press.unit_data import Unit
 import csv
-from generator_interface import MyGenerator
+from web_generators.generator_interface import MyGenerator
 
 
 class JetAcc:
@@ -20,7 +20,7 @@ class JetAcc:
         self.driver = webdriver.Chrome(service=Service((ChromeDriverManager().install())), options=Options())
         self.proton_login = None
         self.proton_password = None
-        self.file_name = 'data.csv'
+        self.file_name = '../data.csv'
         self.jetbrains_accounts = 'jetbrains_accs.csv'
         self.write = True
         self.data = None
@@ -164,13 +164,14 @@ def generate_with_new_email():
     gen = MyGenerator(num_of_tries=1)
     gen.write = False
     gen.run_generator()
-    print("Поштова скринька створена!")
+    # print("Поштова скринька створена!")
     jet_acc = JetAcc()
     jet_acc.write = False
     data = [gen.data['login'], gen.data['password']]
     jet_acc.generate_one_account(row=data)
-    print(f"Protonmail: {jet_acc.data[0]}; Protonmail password: {jet_acc.data[1]}; "
-          f"Jetbrains password: {jet_acc.data[2]}")
+    return jet_acc.data[0], jet_acc.data[1], jet_acc.data[2]
+    # print(f"Protonmail: {jet_acc.data[0]}; Protonmail password: {jet_acc.data[1]}; "
+    #       f"Jetbrains password: {jet_acc.data[2]}")
 
 
 def generate_from_existing_file():
