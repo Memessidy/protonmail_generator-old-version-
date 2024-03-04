@@ -1,3 +1,6 @@
+
+This is the old version of the ProtonMail generator. Please try the new one: https://github.com/Memessidy/protonmail-generator
+
 install python, create venv:
 python -m venv ENV
 
